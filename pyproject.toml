@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prometheus-voice"
+version = "0.1.0"
+description = "Voice interaction with bounded tools, human confirmation and visible results."
+requires-python = ">=3.12"
+dependencies = ["websockets>=15,<18", "opuslib>=3,<4"]
+license = "MIT"
+authors = [
+    { name = "Marcus Comotti" }
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+prometheus_voice = ["static/*.html", "static/*.css", "static/*.js"]

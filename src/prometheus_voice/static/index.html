@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PROMETHEUS VOICE</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" type="module"></script>
+  <script src="/governed.js" type="module"></script>
+  <script src="/x6.js" type="module"></script>
+  <script src="/news.js" type="module"></script>
+  <script src="/sentinel.js" type="module"></script>
+  <script src="/camera.js" type="module"></script>
+<script type="module" src="/device-transcript.js"></script>
+<script type="module" src="/camera-preview.js"></script>
+<script type="module" src="/action-timeline.js"></script>
+</head>
+<body>
+  <main>
+    <header><a href="/" class="brand">PROMETHEUS <span>VOICE</span></a><span class="badge">LOCAL PROTOTYPE · VOICE PREVIEW</span></header>
+    <section class="intro" aria-labelledby="title">
+      <p class="eyebrow">HUMAN INTENT → GOVERNED INTELLIGENT ACTION</p>
+      <h1 id="title">Your voice.<br>Action you can verify.</h1>
+      <p class="description">Ask what Prometheus X6 knows about its capabilities. Then review a calculation and inspect the evidence behind its result.</p>
+      <p class="help">Try saying: “What capabilities are registered in Prometheus X6?” or “Calculate nineteen plus twenty-three.”</p>
+    </section>
+    <section class="panel" aria-labelledby="connection-title">
+      <div class="panel-heading"><h2 id="connection-title">Connection setup</h2><span class="step">01 / LOCAL FOUNDATION</span></div>
+      <div class="status-row"><span>Local server</span><span id="health-status" role="status" data-state="pending">Checking…</span></div>
+      <div class="status-row"><span>Temporary credential</span><span id="token-status" role="status" data-state="pending">Not validated</span></div>
+      <div class="status-row"><span>Voice session</span><span id="voice-status" role="status">Not started</span></div>
+      <div class="actions"><button id="start-voice" type="button" disabled>Start voice session</button><button id="stop-voice" class="secondary" type="button" disabled>Stop</button></div>
+      <p class="help">Starting sends microphone audio to AssemblyAI and starts a metered voice session. This preview stops after 120 seconds. Audio and transcripts are not saved to disk. The last authorized photo is held in memory for up to three minutes.</p>
+      <div class="actions"><button id="validate-token" type="button" disabled>Validate connection</button><button id="check-health" class="secondary" type="button">Check server</button></div>
+      <p id="connection-message" class="help" role="status">Validation requests a temporary credential from AssemblyAI. It does not activate your microphone or start a voice session.</p>
+      <noscript>Enable JavaScript to check the connection.</noscript>
+    </section>
+    <section class="panel" aria-label="Zhengchen conversation"><h2>Zhengchen conversation</h2><p id="device-transcript-status">Waiting for device speech.</p><div id="device-transcript" role="log" aria-live="polite"></div></section>
+    <section class="panel" aria-label="Conversation transcript"><h2>Conversation</h2><div id="transcript" role="log" aria-live="polite"></div></section>
+    <section class="panel governed" aria-labelledby="governed-title">
+      <div class="panel-heading"><h2 id="governed-title">Governed action</h2><span class="step">LOCAL EXECUTION · REAL EVIDENCE</span></div>
+      <p class="help">Say “Calculate nineteen plus twenty-three” during a voice session, or enter numbers below. Voice proposals require your review: check the numbers, review the plan, then execute. The agent receives the actual result and evidence status.</p>
+      <p id="action-progress" class="action-progress" role="status">1 / 3 · Review your numbers</p>
+      <form id="governed-form">
+        <div class="calculation-inputs">
+          <label>First number<input id="operand-a" type="number" step="any" min="-1000000000000" max="1000000000000" value="19" required></label>
+          <label>Operation<select id="operator"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option></select></label>
+          <label>Second number<input id="operand-b" type="number" step="any" min="-1000000000000" max="1000000000000" value="23" required></label>
+        </div>
+        <div class="actions"><button type="submit">Review plan</button></div>
+      </form>
+      <div class="actions"><button id="preview-confirm" class="secondary" type="button">Preview confirmation policy</button><button id="preview-deny" class="secondary" type="button">Preview denied action</button></div>
+      <p id="governed-message" class="help" role="status">Start with 19 + 23. No external services or GPU workers are used by this panel.</p>
+      <p class="help">Voice handoff: <span id="voice-handoff" role="status">No voice calculation requested</span></p>
+      <div id="plan-details" class="plan-details" aria-label="Plan details"></div>
+      <div class="actions"><button id="execute-plan" type="button" disabled>Execute local calculation</button></div>
+      <div id="execution-result" class="plan-details" role="status" aria-label="Execution result"></div>
+    </section>
+    <section class="panel" aria-labelledby="x6-title">
+      <div class="panel-heading"><h2 id="x6-title">Inside Prometheus X6</h2><span class="step">CAPABILITY REGISTRY · READ ONLY</span></div>
+      <p class="help">Ask the core which capabilities are registered. Registration does not confirm that a machine is online or authorize execution.</p>
+      <div class="actions"><button id="x6-refresh" type="button">Read X6 capabilities</button></div>
+      <p id="x6-status" class="help" role="status">Not queried in this page. Ask by voice or read the registry below.</p>
+      <div id="x6-results" class="plan-details"></div>
+    </section>
+    <section class="panel" aria-labelledby="news-title">
+      <div class="panel-heading"><h2 id="news-title">ShadowBroker briefing</h2><span class="step">SOURCED REPORTS · READ ONLY</span></div>
+      <p class="help">Say “Give me a brief ShadowBroker news update.” Up to three reported headlines, with sources and publication dates. Feed freshness does not mean every article is new. Headlines and source metadata are sent to the voice provider when you ask by voice.</p>
+      <div class="actions"><button id="news-refresh" type="button">Read ShadowBroker briefing</button></div>
+      <p id="news-status" class="help" role="status">Not queried. Core route activation is required.</p>
+      <div id="news-results" class="plan-details"></div>
+    </section>
+    <section class="panel" aria-labelledby="sentinel-title">
+      <div class="panel-heading"><h2 id="sentinel-title">Sentinel weather &amp; air</h2><span class="step">ESP32 TELEMETRY · READ ONLY</span></div>
+      <p class="help">Say “What is Sentinel reporting about the weather?” Open-Meteo data processed on Sentinel NM0 and read through X6. Grid movement describes a changing precipitation pattern; it does not predict rain arrival. Weather metadata is sent to the voice provider when requested by voice.</p>
+      <p class="help">Ask “How many aircraft is Sentinel displaying?” AIR reports the filtered display count within 25 nautical miles of the configured São Paulo center, capped at 40 targets. It is not an exhaustive count of nearby aircraft.</p>
+      <div class="actions"><button id="sentinel-refresh" type="button">Read Sentinel weather</button><button id="sentinel-air-refresh" type="button">Read Sentinel aircraft count</button></div>
+      <p id="sentinel-status" class="help" role="status">Not queried. Waiting for core route activation.</p>
+      <div id="sentinel-results" class="plan-details"></div>
+    </section>
+    <section class="panel" aria-label="Observed camera activity"><h2>Camera action timeline</h2><p>Observed events · grouped by request · temporary history. Missing steps are not inferred. Detector output is not independent verification.</p><p id="action-timeline-status">Waiting for activity.</p><div id="action-timeline" aria-live="polite"></div></section>
+    <section class="panel" aria-labelledby="camera-title">
+      <div class="panel-heading"><h2 id="camera-title">Camera object detection</h2><span class="step">ONE PHOTO · REVIEW REQUIRED</span></div>
+      <p class="help">Keep the Zhengchen conversation connection active. Ask “Take a photo and tell me which objects you detect,” then review and click Capture photo. The photo goes to X6 and your Z800; the detector uses a temporary file and removes it. Only object labels and counts go to the voice provider. The upload authorization is temporary; the device identity is not cryptographically authenticated.</p>
+      <div class="actions"><button id="camera-review" type="button">Review photo request</button><button id="camera-capture" type="button" disabled>Capture photo</button><button id="camera-cancel" type="button" disabled>Cancel</button></div>
+      <div><img id="camera-preview" hidden alt="Last authorized Zhengchen photo" width="320"><p id="camera-preview-status">No recent photo.</p><button id="camera-preview-clear" type="button">Clear photo</button></div>
+      <p id="camera-status" class="help" role="status">No photo requested.</p><div id="camera-results" class="plan-details"></div>
+    </section>
+    <section class="flow" aria-label="Project vision">
+      <div><span class="flow-number">01</span><h3>Understand</h3><p>Speech and intent with AssemblyAI.</p></div>
+      <div><span class="flow-number">02</span><h3>Govern</h3><p>Permissions and boundaries before action.</p></div>
+      <div><span class="flow-number">03</span><h3>Verify</h3><p>Inspect local execution evidence and query the X6 registry.</p></div>
+    </section>
+    <footer>Implemented: English voice conversation, human-reviewed local calculation with evidence, and read-only X6 capability queries through its existing WebSocket. Registration does not establish hardware availability. Distributed execution from Voice remains planned.</footer>
+  </main>
+</body>
+</html>
